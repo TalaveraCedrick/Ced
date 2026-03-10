@@ -1,0 +1,106 @@
+import streamlit as st
+import pandas as pd
+
+st.set_page_config(page_title="Student Productivity Tracker", layout="wide")
+
+# Sidebar Navigation
+page = st.sidebar.selectbox("Navigation", ["Home", "Tracker", "Survey", "About"])
+
+# HOME PAGE
+if page == "Home":
+    st.title("📚 Student Productivity Tracker")
+    st.header("Welcome!")
+    st.write("This app helps students monitor their study habits and productivity.")
+
+    st.image("https://images.unsplash.com/photo-1524995997946-a1c2e315a42f")
+    st.success("Use the sidebar to navigate through the app.")
+
+# TRACKER PAGE
+elif page == "Tracker":
+    st.title("Study Tracker")
+
+    name = st.text_input("Enter your name")
+    course = st.selectbox("Select your course", ["IT", "Computer Science", "Engineering", "Business"])
+
+    study_date = st.date_input("Select study date")
+
+    study_hours = st.slider("How many hours did you study?", 0, 12)
+
+    subject = st.multiselect("Subjects studied", ["Programming", "Networking", "Database", "Math"])
+
+    task = st.text_area("What tasks did you complete today?")
+
+    priority = st.radio("Task Priority", ["Low", "Medium", "High"])
+
+    mood = st.select_slider("Your study mood", ["Very Bad","Bad","Okay","Good","Excellent"])
+
+    break_taken = st.checkbox("Did you take breaks?")
+
+    productivity = st.number_input("Rate your productivity (1-10)", 1, 10)
+
+    uploaded_file = st.file_uploader("Upload study notes")
+
+    if st.button("Submit Study Log"):
+        st.success("Study log submitted!")
+
+        data = {
+            "Name":[name],
+            "Course":[course],
+            "Hours":[study_hours],
+            "Priority":[priority],
+            "Mood":[mood],
+            "Productivity":[productivity]
+        }
+
+        df = pd.DataFrame(data)
+
+        st.subheader("Study Summary")
+        st.dataframe(df)
+
+        st.bar_chart(df["Hours"])
+
+# SURVEY PAGE
+elif page == "Survey":
+    st.title("Student Feedback Survey")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.write("Study Environment")
+        noise = st.selectbox("Noise Level", ["Quiet","Moderate","Noisy"])
+        lighting = st.selectbox("Lighting", ["Poor","Average","Good"])
+
+    with col2:
+        st.write("Device Used")
+        device = st.radio("Device", ["Laptop","Tablet","Phone"])
+
+    agree = st.checkbox("I agree that environment affects productivity")
+
+    if st.button("Submit Survey"):
+        st.balloons()
+        st.write("Thanks for your feedback!")
+
+# ABOUT PAGE
+elif page == "About":
+    st.title("About This App")
+
+    st.markdown("""
+### What the App Does
+This application helps students track their daily study activity and productivity.
+
+### Target Users
+College students who want to manage their study time and tasks.
+
+### Inputs Collected
+- Name
+- Course
+- Study hours
+- Subjects
+- Tasks completed
+- Mood and productivity rating
+
+### Outputs
+- Study summary table
+- Productivity chart
+- Feedback messages
+""")
